@@ -301,7 +301,7 @@ semanas+=`<div class="semana-box"><strong>Semana ${s}</strong><br><br>💰 Lavad
 semanasContainer.innerHTML=`<div class="semana-grid">${semanas}</div>`;
 
 let rank={}; f.forEach(r=>rank[r.faccao]=(rank[r.faccao]||0)+r.valorSujo);
-rankingMensal.innerHTML=Object.entries(rank).sort((a,b)=>b[1]-a[1]).map((r,i)=>`${i+1}. ${r[0]} — ${formatar(r[1])}`).join('<br>');
+rankingMensal.innerHTML=Object.entries(rank).sort((a,b)=>b[1]-a[1]).map((r,i)=>`${i+1}. ${r[0]} — $ ${formatar(r[1])}`).join('<br>');
 
 listaMensal.innerHTML='';
 [...f].reverse().forEach(r=>{
