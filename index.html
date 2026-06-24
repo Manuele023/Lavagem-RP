@@ -3,157 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cartel - Sistema de Lavagem</title>
-
-<link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
-
+<title>Sistema de Lavagem</title>
 <style>
-body{
-    font-family: Arial;
-    background:#1b1b1b;
-    color:white;
-    max-width:700px;
-    margin:auto;
-    padding:20px;
-}
-
-h1,h2{text-align:center;}
-
-label{display:block;margin-top:12px;}
-
-input,select{
-    width:100%;
-    padding:12px;
-    border:none;
-    border-radius:8px;
-    background:#2a2a2a;
-    color:white;
-    box-sizing:border-box;
-}
-
-/* botão */
-button{
-    width:100%;
-    margin-top:12px;
-    padding:12px;
-    border:none;
-    border-radius:8px;
-    background:#2ecc71;
-    cursor:pointer;
-    color:white;
-    font-size:15px;
-}
-button:hover{opacity:0.9;}
-
-.lavagem-card{
-    background:#2a2a2a;
-    margin-top:10px;
-    padding:12px;
-    border-radius:10px;
-    border-left:4px solid #2ecc71;
-}
-
-#lista{
-    max-height:300px;
-    overflow-y:auto;
-    background:#1f1f1f;
-    padding:10px;
-    border-radius:10px;
-    border:1px solid #333;
-}
-
-.painel{
-    background:#2a2a2a;
-    padding:15px;
-    border-radius:12px;
-    margin-top:20px;
-    border:1px solid #333;
-}
-
-.ranking{
-    font-size:13px;
-    color:#ddd;
-}
-
-/* TOM SELECT */
-.ts-wrapper{width:100%;}
-.ts-control{
-    background:#2a2a2a !important;
-    border:1px solid #333 !important;
-    border-radius:8px !important;
-    color:white !important;
-    padding:12px !important;
-}
-.ts-dropdown{
-    background:#2a2a2a !important;
-    border:1px solid #333 !important;
-    color:white !important;
-}
-.ts-dropdown .option:hover{
-    background:#3a3a3a !important;
-}
-
-/* SEMANAL GRID */
-.semana-grid{
-    display:grid;
-    grid-template-columns:repeat(5, 1fr);
-    gap:10px;
-    margin-top:10px;
-}
-
-.semana-box{
-    background:#2a2a2a;
-    padding:10px;
-    border-radius:10px;
-    border:1px solid #333;
-}
-
-/* FILTRO MENSAL */
-.filtro-linha{
-    display:flex;
-    gap:10px;
-    margin-top:10px;
-}
-.filtro-linha div{flex:1;}
+body{font-family:Arial;background:#1b1b1b;color:#fff;max-width:900px;margin:auto;padding:20px}
+input,select,button{width:100%;padding:10px;margin-top:8px;border-radius:8px;border:none;background:#2a2a2a;color:#fff;box-sizing:border-box}
+button{background:#2ecc71;cursor:pointer}
+.painel,.lavagem-card{background:#2a2a2a;padding:12px;border-radius:10px;margin-top:10px}
+.lavagem-card{border-left:4px solid #2ecc71}
+#lista,#listaMensal{max-height:300px;overflow-y:auto;background:#1f1f1f;padding:10px;border-radius:10px}
+.filtro-linha{display:flex;gap:10px}
+.filtro-linha div{flex:1}
+.semana-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.semana-box{background:#1f1f1f;padding:10px;border-radius:8px}
 </style>
 </head>
-
 <body>
-
 <h1>🧾 Sistema de Lavagem</h1>
 
-<label>Número da Lavagem</label>
-<input id="numeroLavagemInput" type="number">
-
-<label>Facção solicitante</label>
-<select id="faccao">
-<option>4M</option>
-<option>B13</option>
-<option>Blacklist</option>
-<option>Brothers</option>
-<option>Coronel</option>
-<option>Cross & Guerra</option>
-<option>Dendê</option>
-<option>Guerra</option>
-<option>HPI</option>
-<option>Hospício</option>
-<option>Legacy</option>
-<option>Lowprofile</option>
-<option>Malta</option>
-<option>Mandrágora</option>
-<option>MDC</option>
-<option>Medelin</option>
-<option>RV</option>
-<option>Yolo</option>
-</select>
-
-<label>Passaporte</label>
-<input id="passaporte">
-
-<label>Valor sujo</label>
-<input id="valor">
-
+<label>Número</label><input id="numeroLavagemInput" type="number">
+<label>Facção</label><input id="faccao">
+<label>Passaporte</label><input id="passaporte">
+<label>Valor Sujo</label><input id="valor">
 <button onclick="calcular()">Registrar Lavagem</button>
 
 <h2>📜 Histórico de Lavagens</h2>
@@ -161,182 +31,140 @@ button:hover{opacity:0.9;}
 
 <h2>📊 Painel de Controle</h2>
 <div class="painel">
-📜 Total de lavagens: <span id="totalLavagens">0</span><br>
-💰 Valor total lavado: <span id="totalDinheiro">0</span><br>
-💸 Lucro: <span id="lucroTotal">0</span><br>
-</div>
-
-<h2>📊 Registro Semanal</h2>
-<div class="painel">
-<div id="semanasContainer"></div>
+📜 Total: <span id="totalLavagens"></span><br>
+💰 Lavado: <span id="totalDinheiro"></span><br>
+💸 Lucro: <span id="lucroTotal"></span>
 </div>
 
 <h2>📆 Registro Mensal</h2>
 <div class="painel">
-
 <div class="filtro-linha">
-<div>
-<label>Mês</label>
-<select id="filtroMes" onchange="atualizarTudo()"></select>
+<div><label>Mês</label><select id="filtroMes" onchange="atualizarTudo()"></select></div>
+<div><label>Ano</label><select id="filtroAno" onchange="atualizarTudo()"></select></div>
 </div>
 
-<div>
-<label>Ano</label>
-<select id="filtroAno" onchange="atualizarTudo()"></select>
-</div>
-</div>
+<div id="semanasContainer" style="margin-top:15px"></div>
 
-<br>
-
-📅 Mês: <span id="mesAtual"></span><br><br>
-💰 Total lavado mensal: <span id="totalMensal"></span><br><br>
+<br>📅 Mês: <span id="mesAtual"></span><br><br>
+💰 Total mensal: <span id="totalMensal"></span><br><br>
 💸 Lucro mensal: <span id="lucroMensal"></span><br><br>
 
-<strong>🏴 Ranking mensal de facções</strong>
-<div id="rankingMensal" class="ranking"></div>
+<strong>🏴 Ranking mensal</strong>
+<div id="rankingMensal"></div>
 
-<br>
-
-<strong>📜 Lavagens do mês</strong>
+<br><strong>📜 Lavagens do mês</strong>
 <div id="listaMensal"></div>
-
 </div>
 
 <script>
-new TomSelect("#faccao",{create:false});
+let registros=JSON.parse(localStorage.getItem("registros"))||[];
+let numero=Number(localStorage.getItem("numeroLavagem"))||26;
 
-let registros = JSON.parse(localStorage.getItem("registros")) || [];
-let numero = 26;
+function enviarDiscord(r){
 
-function converter(v){ return Number(v.replace(/\./g,"")); }
-function formatar(v){ return Number(v).toLocaleString("pt-BR"); }
+    fetch("https://discord.com/api/webhooks/1519147289036193972/WreVR0l-ZJ7GbI7xiGUMdi-2k6P64hem0GmnH4dyGHGvlt0neVrf88mAIzaciy2Frjsm",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+            embeds:[{
+                title:`🧾 Solicitação de Lavagem Nº ${r.numero}`,
+                color:3066993,
+                description:
+`**Facção solicitante:** ${r.faccao}
+**Passaporte:** ${r.passaporte}
+
+💰 **Valores**
+**Valor Sujo:** ${formatar(r.valorSujo)}
+**Valor Limpo:** ${formatar(r.valorLimpo)}`,
+                footer:{
+                    text:"Sistema de Lavagem do Cartel"
+                }
+            }]
+        })
+    });
+
+}
+    
+function formatar(v){return Number(v).toLocaleString('pt-BR')}
+
+function initFiltros(){
+let mes=document.getElementById('filtroMes');
+for(let i=1;i<=12;i++) mes.innerHTML+=`<option value="${String(i).padStart(2,'0')}">${String(i).padStart(2,'0')}</option>`;
+let atual=new Date().getFullYear();
+for(let i=atual+10;i>=2020;i--) document.getElementById('filtroAno').innerHTML+=`<option>${i}</option>`;
+mes.value=String(new Date().getMonth()+1).padStart(2,'0');
+document.getElementById('filtroAno').value=atual;
+}
 
 function calcular(){
-
-    let faccao=document.getElementById("faccao").value;
-    let passaporte=document.getElementById("passaporte").value;
-    let valor=document.getElementById("valor").value;
-
-    let valorSujo=converter(valor);
-    let valorLimpo=valorSujo*0.80;
-
-    let data=new Date();
-
-    registros.push({
-        numero:numero++,
-        faccao,
-        passaporte,
-        valorSujo,
-        valorLimpo,
-        semana:Math.ceil(data.getDate()/7),
-        mes:String(data.getMonth()+1).padStart(2,"0"),
-        ano:String(data.getFullYear())
-    });
-
-    localStorage.setItem("registros",JSON.stringify(registros));
-    atualizarTudo();
-}
-
-/* HISTÓRICO */
-function atualizarLista(){
-
-    let lista=document.getElementById("lista");
-    lista.innerHTML="";
-
-    [...registros].reverse().forEach(r=>{
-
-        let div=document.createElement("div");
-        div.className="lavagem-card";
-
-        div.innerHTML=`
-🧾 Solicitação de lavagem Nº ${r.numero}<br>
-🔫 Facção solicitante: ${r.faccao}<br>
-💵 Valor sujo: ${formatar(r.valorSujo)}<br>
-💸 Valor limpo: ${formatar(r.valorLimpo)}
-`;
-
-        lista.appendChild(div);
-    });
-}
-
-/* SEMANAL GRID */
-function atualizarSemanas(){
-
-    let container=document.getElementById("semanasContainer");
-
-    function box(lista,titulo){
-
-        let total=lista.reduce((a,b)=>a+b.valorSujo,0);
-        let lucro=total*0.10;
-
-        return `
-<div class="semana-box">
-<strong>Semana ${titulo}</strong><br><br>
-💰 Valor lavado: ${formatar(total)}<br>
-💸 Lucro semanal: ${formatar(lucro)}
-</div>`;
-    }
-
-    let s1=registros.filter(r=>r.semana===1);
-    let s2=registros.filter(r=>r.semana===2);
-    let s3=registros.filter(r=>r.semana===3);
-    let s4=registros.filter(r=>r.semana===4);
-    let s5=registros.filter(r=>r.semana===5);
-
-    container.innerHTML=`
-<div class="semana-grid">
-${box(s1,1)}
-${box(s2,2)}
-${box(s3,3)}
-${box(s4,4)}
-${box(s5,5)}
-</div>`;
-}
-
-/* MENSAL */
-function atualizarMensal(){
-
-    let mes=document.getElementById("filtroMes").value;
-    let ano=document.getElementById("filtroAno").value;
-
-    let filtrado=registros.filter(r=>r.mes===mes && r.ano===ano);
-
-    document.getElementById("mesAtual").innerText=`${mes}/${ano}`;
-
-    let total=filtrado.reduce((a,b)=>a+b.valorSujo,0);
-
-    document.getElementById("totalMensal").innerText=formatar(total);
-    document.getElementById("lucroMensal").innerText=formatar(total*0.10);
-
-    let lista=document.getElementById("listaMensal");
-    lista.innerHTML="";
-
-    filtrado.reverse().forEach(r=>{
-        lista.innerHTML+=`
-🧾 Solicitação de lavagem Nº ${r.numero}<br>
-🔫 Facção solicitante: ${r.faccao}<br>
-💵 Valor sujo: ${formatar(r.valorSujo)}<br>
-💸 Valor limpo: ${formatar(r.valorLimpo)}<br><br>`;
-    });
-}
-
-/* TOTAL */
-function atualizarTudo(){
-
-    document.getElementById("totalLavagens").innerText=registros.length;
-
-    let total=registros.reduce((a,b)=>a+b.valorSujo,0);
-
-    document.getElementById("totalDinheiro").innerText=formatar(total);
-    document.getElementById("lucroTotal").innerText=formatar(total*0.10);
-
-    atualizarLista();
-    atualizarSemanas();
-    atualizarMensal();
-}
-
+let data=new Date();
+let r={
+numero:document.getElementById('numeroLavagemInput').value||numero++,
+faccao:document.getElementById('faccao').value,
+passaporte:document.getElementById('passaporte').value,
+valorSujo:Number(document.getElementById('valor').value.replace(/\./g,'')),
+valorLimpo:Number(document.getElementById('valor').value.replace(/\./g,''))*0.8,
+data:data.toLocaleString('pt-BR'),
+mes:String(data.getMonth()+1).padStart(2,'0'),
+ano:String(data.getFullYear()),
+semana:Math.ceil(data.getDate()/7)
+};
+registros.push(r);
+localStorage.setItem("registros",JSON.stringify(registros));
+enviarDiscord(registro);
+localStorage.setItem("numeroLavagem",numero);
 atualizarTudo();
-</script>
+}
 
-</body>
-</html>
+function excluir(i){
+registros.splice(i,1);
+localStorage.setItem("registros",JSON.stringify(registros));
+atualizarTudo();
+}
+
+function atualizarLista(){
+let lista=document.getElementById('lista'); lista.innerHTML='';
+[...registros].reverse().forEach(r=>{
+let idx=registros.indexOf(r);
+lista.innerHTML+=`<div class="lavagem-card">🧾 Solicitação de lavagem Nº ${r.numero}<br>📅 ${r.data||'-'}<br>🔫 Facção solicitante: ${r.faccao}<br>💵 Valor sujo: ${formatar(r.valorSujo)}<br>💸 Valor limpo: ${formatar(r.valorLimpo)}<br><button onclick="excluir(${idx})">Excluir</button></div>`;
+});
+}
+
+function atualizarMensal(){
+let mes=filtroMes.value, ano=filtroAno.value;
+let f=registros.filter(r=>r.mes===mes && r.ano===ano);
+mesAtual.innerText=mes+'/'+ano;
+
+let total=f.reduce((a,b)=>a+b.valorSujo,0);
+totalMensal.innerText=formatar(total);
+lucroMensal.innerText=formatar(total*0.1);
+
+let semanas='';
+for(let s=1;s<=5;s++){
+let t=f.filter(r=>r.semana===s).reduce((a,b)=>a+b.valorSujo,0);
+semanas+=`<div class="semana-box"><strong>Semana ${s}</strong><br><br>💰 Lavado: ${formatar(t)}<br>💸 Lucro: ${formatar(t*0.1)}</div>`;
+}
+semanasContainer.innerHTML=`<div class="semana-grid">${semanas}</div>`;
+
+let rank={}; f.forEach(r=>rank[r.faccao]=(rank[r.faccao]||0)+r.valorSujo);
+rankingMensal.innerHTML=Object.entries(rank).sort((a,b)=>b[1]-a[1]).map((r,i)=>`${i+1}. ${r[0]} — ${formatar(r[1])}`).join('<br>');
+
+listaMensal.innerHTML='';
+[...f].reverse().forEach(r=>{
+listaMensal.innerHTML+=`<div class="lavagem-card">🧾 Solicitação de lavagem Nº ${r.numero}<br>📅 ${r.data||'-'}<br>🔫 Facção solicitante: ${r.faccao}<br>💵 Valor sujo: ${formatar(r.valorSujo)}<br>💸 Valor limpo: ${formatar(r.valorLimpo)}</div>`;
+});
+}
+
+function atualizarTudo(){
+totalLavagens.innerText=registros.length;
+let total=registros.reduce((a,b)=>a+b.valorSujo,0);
+totalDinheiro.innerText=formatar(total);
+lucroTotal.innerText=formatar(total*0.1);
+atualizarLista();
+atualizarMensal();
+}
+initFiltros(); atualizarTudo();
+</script>
+</body></html>
