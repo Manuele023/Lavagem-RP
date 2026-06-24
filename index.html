@@ -6,12 +6,11 @@
 <title>Cartel - Sistema de Lavagem</title>
 <style>
 .hero{
-    height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-    text-align: center;
+    align-items: flex-start; /* tudo à esquerda */
+    padding: 40px 20px;
 }
 
 .hero h1{
@@ -29,13 +28,13 @@
     transition: all 0.6s ease;
 }
 
-.painel de controle{
+.painel-de-controle{
     opacity: 0;
     transform: translateY(40px);
     transition: all 0.6s ease;
 }
 
-.registro mensal{
+.registro-mensal{
     opacity: 0;
     transform: translateY(40px);
     transition: all 0.6s ease;
@@ -185,7 +184,7 @@ button{
     
 </div>
 
-<div class="painel de controle">
+<div class="painel-de-controle">
 
 <h2>📊 Painel de Controle</h2>
 <div class="painel">
@@ -195,7 +194,7 @@ button{
     
 </div>
 
-<div class="registro mensal">
+<div class="registro-mensal">
     
 <h2>📆 Registro Mensal</h2>
 <div class="painel">
