@@ -20,10 +20,38 @@ button{background:#2ecc71;cursor:pointer}
 <body>
 <h1>🧾 Sistema de Lavagem</h1>
 
-<label>Número</label><input id="numeroLavagemInput" type="number">
-<label>Facção</label><input id="faccao">
-<label>Passaporte</label><input id="passaporte">
-<label>Valor Sujo</label><input id="valor">
+<label>Número da Lavagem</label>
+<input id="numeroLavagemInput" type="number" placeholder="Ex: 26 (Confira o discord antes)">
+    
+<label>Facção solicitante</label>
+<select id="faccao">
+    <option value="" selected disabled>Selecione a facção</option>
+    <option>4M</option>
+    <option>B13</option>
+    <option>Blacklist</option>
+    <option>Brothers</option>
+    <option>Coronel</option>
+    <option>Cross & Guerra</option>
+    <option>Dendê</option>
+    <option>Guerra</option>
+    <option>HPI</option>
+    <option>Hospício</option>
+    <option>Legacy</option>
+    <option>Lowprofile</option>
+    <option>Malta</option>
+    <option>Mandrágora</option>
+    <option>MDC</option>
+    <option>Medelin</option>
+    <option>RV</option>
+    <option>Yolo</option>
+</select>
+    
+<label>Passaporte</label>
+<input id="passaporte" placeholder="Insira o passaporte para pagamento">
+
+<label>Valor sujo</label>
+<input id="valor" placeholder="Ex.: 1.000.000">
+
 <button onclick="calcular()">Registrar Lavagem</button>
 
 <h2>📜 Histórico de Lavagens</h2>
@@ -31,9 +59,9 @@ button{background:#2ecc71;cursor:pointer}
 
 <h2>📊 Painel de Controle</h2>
 <div class="painel">
-📜 Total: <span id="totalLavagens"></span><br>
-💰 Lavado: <span id="totalDinheiro"></span><br>
-💸 Lucro: <span id="lucroTotal"></span>
+📜 Nº total de lavagens: <span id="totalLavagens"></span><br>
+💰 Valor total lavado: <span id="totalDinheiro"></span><br>
+💸 Lucro total: <span id="lucroTotal"></span>
 </div>
 
 <h2>📆 Registro Mensal</h2>
@@ -49,7 +77,7 @@ button{background:#2ecc71;cursor:pointer}
 💰 Total mensal: <span id="totalMensal"></span><br><br>
 💸 Lucro mensal: <span id="lucroMensal"></span><br><br>
 
-<strong>🏴 Ranking mensal</strong>
+<strong>🏴 Ranking mensal de facçãoes</strong>
 <div id="rankingMensal"></div>
 
 <br><strong>📜 Lavagens do mês</strong>
@@ -113,7 +141,7 @@ semana:Math.ceil(data.getDate()/7)
 };
 registros.push(r);
 localStorage.setItem("registros",JSON.stringify(registros));
-enviarDiscord(registro);
+enviarDiscord(r);
 localStorage.setItem("numeroLavagem",numero);
 atualizarTudo();
 }
@@ -128,7 +156,7 @@ function atualizarLista(){
 let lista=document.getElementById('lista'); lista.innerHTML='';
 [...registros].reverse().forEach(r=>{
 let idx=registros.indexOf(r);
-lista.innerHTML+=`<div class="lavagem-card">🧾 Solicitação de lavagem Nº ${r.numero}<br>📅 ${r.data||'-'}<br>🔫 Facção solicitante: ${r.faccao}<br>💵 Valor sujo: ${formatar(r.valorSujo)}<br>💸 Valor limpo: ${formatar(r.valorLimpo)}<br><button onclick="excluir(${idx})">Excluir</button></div>`;
+lista.innerHTML+=`<div class="lavagem-card">🧾 Solicitação de lavagem Nº ${r.numero}<br>📅 Data e hora: ${r.data||'-'}<br>🔫 Facção solicitante: ${r.faccao}<br>💵 Valor sujo: ${formatar(r.valorSujo)}<br>💸 Valor limpo: ${formatar(r.valorLimpo)}<br><button onclick="excluir(${idx})">Excluir</button></div>`;
 });
 }
 
@@ -153,7 +181,7 @@ rankingMensal.innerHTML=Object.entries(rank).sort((a,b)=>b[1]-a[1]).map((r,i)=>`
 
 listaMensal.innerHTML='';
 [...f].reverse().forEach(r=>{
-listaMensal.innerHTML+=`<div class="lavagem-card">🧾 Solicitação de lavagem Nº ${r.numero}<br>📅 ${r.data||'-'}<br>🔫 Facção solicitante: ${r.faccao}<br>💵 Valor sujo: ${formatar(r.valorSujo)}<br>💸 Valor limpo: ${formatar(r.valorLimpo)}</div>`;
+listaMensal.innerHTML+=`<div class="lavagem-card">🧾 Solicitação de lavagem Nº ${r.numero}<br>📅 Data e hora: ${r.data||'-'}<br>🔫 Facção solicitante: ${r.faccao}<br>💵 Valor sujo: ${formatar(r.valorSujo)}<br>💸 Valor limpo: ${formatar(r.valorLimpo)}</div>`;
 });
 }
 
