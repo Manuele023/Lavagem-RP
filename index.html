@@ -3,8 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sistema de Lavagem</title>
+<title>Cartel - Sistema de Lavagem</title>
 <style>
+.hero{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding-bottom:100px;
+}
+    
 body{
     font-family:Arial;
     color:#fff;
@@ -17,7 +25,7 @@ body{
     url("fundo-cartel.png");
 
     background-size: cover;
-    background-position: center 50%;
+    background-position: center 35%;
     background-repeat: no-repeat;
     background-attachment: fixed;
 }
@@ -94,6 +102,7 @@ button{
     border:1px solid rgba(255,255,255,0.08);
 }
 </style>
+    
 <h1>🧾 Sistema de Lavagem</h1>
 
 <label>Número da Lavagem</label>
@@ -129,10 +138,16 @@ button{
 <label>Valor sujo</label>
 <input id="valor" placeholder="Ex.: 1.000.000">
 
-<button onclick="calcular()" style="font-weight: bold;">
+<button onclick="calcular()" style="
+    font-weight:bold;
+    background:#8B1E1E;
+    color:white;
+">
     Registrar Lavagem
 </button>
 
+</div>
+    
 <h2>📜 Histórico de Lavagens</h2>
 <div id="lista"></div>
 
@@ -235,7 +250,15 @@ function atualizarLista(){
 let lista=document.getElementById('lista'); lista.innerHTML='';
 [...registros].reverse().forEach(r=>{
 let idx=registros.indexOf(r);
-lista.innerHTML+=`<div class="lavagem-card">🧾 Solicitação de lavagem Nº ${r.numero}<br>📅 Data e hora: ${r.data||'-'}<br>🔫 Facção solicitante: ${r.faccao}<br>💵 Valor sujo: ${formatar(r.valorSujo)}<br>💸 Valor limpo: ${formatar(r.valorLimpo)}<br><button onclick="excluir(${idx})" style="font-weight: bold;">Excluir</button></div>`;
+lista.innerHTML+=`<div class="lavagem-card">🧾 Solicitação de lavagem Nº ${r.numero}<br>📅 Data e hora: ${r.data||'-'}<br>🔫 Facção solicitante: ${r.faccao}<br>💵 Valor sujo: ${formatar(r.valorSujo)}<br>💸 Valor limpo: ${formatar(r.valorLimpo)}<br><button onclick="excluir(${idx})" style="
+font-weight:bold;
+background:#8B1E1E;
+color:white;
+border:none;
+box-shadow:0 4px 12px rgba(139,30,30,.35);
+">
+Excluir
+</button></div>`;
 });
 }
 
