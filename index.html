@@ -75,6 +75,43 @@ button:hover{opacity:0.9;}
     font-size:13px;
     color:#ddd;
 }
+
+/* =========================
+   🔧 CORREÇÃO TOM SELECT
+   ========================= */
+
+.ts-wrapper{
+    width:100%;
+}
+
+.ts-control{
+    background:#2a2a2a !important;
+    border:1px solid #333 !important;
+    border-radius:8px !important;
+    color:white !important;
+    padding:12px !important;
+    box-shadow:none !important;
+}
+
+.ts-control input{
+    color:white !important;
+}
+
+.ts-dropdown{
+    background:#2a2a2a !important;
+    border:1px solid #333 !important;
+    color:white !important;
+}
+
+.ts-dropdown .option{
+    background:#2a2a2a !important;
+    color:white !important;
+}
+
+.ts-dropdown .option:hover{
+    background:#3a3a3a !important;
+    color:white !important;
+}
 </style>
 </head>
 
@@ -105,7 +142,7 @@ button:hover{opacity:0.9;}
 <option>MDC</option>
 <option>Medelin</option>
 <option>RV</option>
-<option>YOLO</option>
+<option>Yolo</option>
 </select>
 
 <label>Passaporte para pagamento</label>
@@ -144,7 +181,6 @@ function formatar(v){
     return Number(v).toLocaleString("pt-BR");
 }
 
-// DISCORD WEBHOOK (EMBED VERTICAL)
 function enviarDiscord(r){
 
     fetch("https://discord.com/api/webhooks/1519147289036193972/WreVR0l-ZJ7GbI7xiGUMdi-2k6P64hem0GmnH4dyGHGvlt0neVrf88mAIzaciy2Frjsm", {
@@ -154,41 +190,19 @@ function enviarDiscord(r){
             embeds:[{
                 title:`🧾 Solicitação de Lavagem Nº ${r.numero}`,
                 color:0x2ecc71,
-
                 fields:[
-                    {
-                        name:"Facção solicitante",
-                        value:r.faccao || "—",
-                        inline:false
-                    },
-                    {
-                        name:"Passaporte para pagamento",
-                        value:String(r.passaporte),
-                        inline:false
-                    },
-                    {
-                        name:"Valor sujo",
-                        value:formatar(r.valorSujo),
-                        inline:false
-                    },
-                    {
-                        name:"Valor limpo",
-                        value:formatar(r.valorLimpo),
-                        inline:false
-                    }
+                    {name:"Facção solicitante", value:r.faccao || "—", inline:false},
+                    {name:"Passaporte para pagamento", value:String(r.passaporte), inline:false},
+                    {name:"Valor sujo", value:formatar(r.valorSujo), inline:false},
+                    {name:"Valor limpo", value:formatar(r.valorLimpo), inline:false}
                 ],
-
-                footer:{
-                    text:"Sistema de Lavagem do Cartel"
-                },
-
+                footer:{text:"Sistema de Lavagem do Cartel"},
                 timestamp:new Date().toISOString()
             }]
         })
     });
 }
 
-// registrar lavagem
 function calcular(){
 
     let faccao = document.getElementById("faccao").value;
@@ -235,7 +249,6 @@ function calcular(){
     document.getElementById("valor").value="";
 }
 
-// excluir
 function excluir(i){
     if(!confirm("Excluir lavagem?")) return;
 
@@ -245,7 +258,6 @@ function excluir(i){
     atualizarTudo();
 }
 
-// histórico
 function atualizarLista(){
 
     let lista = document.getElementById("lista");
@@ -270,7 +282,6 @@ Valor limpo: ${formatar(r.valorLimpo)}<br><br>
     });
 }
 
-// painel
 function atualizarPainel(){
 
     document.getElementById("totalLavagens").innerText = registros.length;
