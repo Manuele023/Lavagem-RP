@@ -327,31 +327,36 @@ function atualizarLista(){
 }
 
 function atualizarMensal(){
-let mes=filtroMes.value, ano=filtroAno.value;
-let f=registros.filter(r=>r.mes===mes && r.ano===ano);
-mesAtual.innerText=mes+'/'+ano;
+    let mes = filtroMes.value, ano = filtroAno.value;
+    let f = registros.filter(r => r.mes === mes && r.ano === ano);
 
-let total=f.reduce((a,b)=>a+b.valorSujo,0);
-totalMensal.innerText=formatar(total);
-lucroMensal.innerText=formatar(total*0.1);
+    mesAtual.innerText = mes + '/' + ano;
 
-let semanas='';
-for(let s=1;s<=5;s++){
-let t=f.filter(r=>r.semana===s).reduce((a,b)=>a+b.valorSujo,0);
- semanas += `
-    <div class="semana-box">
-        <strong>Semana ${s}</strong><br><br>
+    let total = f.reduce((a,b) => a + b.valorSujo, 0);
+    totalMensal.innerText = formatar(total);
+    lucroMensal.innerText = formatar(total * 0.1);
 
-        💰 Lavado:<br>
-        $ ${formatar(t)}<br><br>
+    let semanas = '';
 
-        💸 Lucro:<br>
-        R$ ${formatar(t * 0.1)}
-    </div>
-    `;
+    for (let s = 1; s <= 5; s++) {
+        let t = f.filter(r => r.semana === s)
+                 .reduce((a,b) => a + b.valorSujo, 0);
+
+        semanas += `
+        <div class="semana-box">
+            <strong>Semana ${s}</strong><br><br>
+
+            💰 Lavado:<br>
+            $ ${formatar(t)}<br><br>
+
+            💸 Lucro:<br>
+            R$ ${formatar(t * 0.1)}
+        </div>
+        `;
+    }
+
+    semanasContainer.innerHTML = `<div class="semana-grid">${semanas}</div>`;
 }
-semanasContainer.innerHTML=`<div class="semana-grid">${semanas}</div>`;
-
 let rank={}; f.forEach(r=>rank[r.faccao]=(rank[r.faccao]||0)+r.valorSujo);
 rankingMensal.innerHTML=Object.entries(rank).sort((a,b)=>b[1]-a[1]).map((r,i)=>`${i+1}. ${r[0]} — $ ${formatar(r[1])}`).join('<br>');
 
@@ -359,7 +364,7 @@ listaMensal.innerHTML = '';
 
 [...f].reverse().forEach(r => {
 
-    let idx = registros.indexOf(r); // ou f.indexOf(r) dependendo de onde vem
+    let idx = f.indexOf(r);
 
     let lucroPercent = 0;
 
@@ -372,12 +377,12 @@ listaMensal.innerHTML = '';
     listaMensal.innerHTML += `
     <div class="lavagem-card">
         🧾 Solicitação de lavagem Nº ${r.numero}<br>
-            📅 Data e hora: ${r.data || '-'}<br>
-            📋 Tipo de lavagem (Porcentagem): ${r.taxa}%<br>
-            🔫 Facção solicitante: ${r.faccao}<br>
-            💵 Valor sujo: $ ${formatar(r.valorSujo)}<br>
-            💸 Valor limpo: R$ ${formatar(r.valorLimpo)}<br>
-            💰 Lucro: R$ ${formatar(lucro)} (${lucroPercent}%)<br>
+        📅 Data e hora: ${r.data || '-'}<br>
+        📋 Tipo de lavagem (Porcentagem): ${r.taxa}%<br>
+        🔫 Facção solicitante: ${r.faccao}<br>
+        💵 Valor sujo: $ ${formatar(r.valorSujo)}<br>
+        💸 Valor limpo: R$ ${formatar(r.valorLimpo)}<br>
+        💰 Lucro: R$ ${formatar(lucro)} (${lucroPercent}%)<br>
 
         <button onclick="excluir(${idx})" style="
             font-weight:bold;
