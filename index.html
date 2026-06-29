@@ -316,20 +316,15 @@ async function calcular(){
 };
 
     // 🔥 SALVA NO FIREBASE
-await firestore.addDoc(
-    firestore.collection(db, "lavagens"),
-    r
-);
+await addDoc(collection(db, "lavagens"), r);
 
 enviarDiscord(r);
 
-// Recarrega os dados do Firebase e atualiza toda a tela
+// Recarrega
 await carregar();
 }
 async function carregar() {
-    const snap = await firestore.getDocs(
-        firestore.collection(db, "lavagens")
-    );
+    const snap = await getDocs(collection(db, "lavagens"));
 
     registros = [];
 
@@ -343,12 +338,8 @@ async function carregar() {
     atualizarTudo();
 }
 async function excluir(id){
+    await deleteDoc(doc(db, "lavagens", id));
 
-    await firestore.deleteDoc(
-        firestore.doc(db, "lavagens", id)
-    );
-
-    
     await carregar();
 }
 function atualizarLista(){
