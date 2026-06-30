@@ -217,7 +217,6 @@ button{
    <option>Alemanha</option>
    <option>B13</option>
    <option>Blacklist</option>
-   <option>Cartel</option>
    <option>Colômbia</option>
    <option>Coronel</option>
    <option>Crias</option>
@@ -586,7 +585,8 @@ for (let s = 1; s <= 5; s++) {
     [...f].reverse().forEach(r => {
         let lucroPercent = 0;
 
-        if(r.taxa==20) lucroPercent=10;
+        if(r.taxa==10) lucroPercent=90;
+        else if(r.taxa==20) lucroPercent=10;
         else if(r.taxa==25) lucroPercent=15;
         else if(r.taxa==30) lucroPercent=20;
 
