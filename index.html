@@ -1,4 +1,4 @@
-Uncaught SyntaxError: Unexpected end of input (at Lavagem-Cartel/:488:1)<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -128,14 +128,12 @@ button{
     margin-top: 10px;
     border-radius: 12px;
     background: rgba(31,31,31,0.50);
+}
 
+#rankingMensal{
     display: flex;
     flex-direction: column;
     gap: 8px;
-}
-
-#rankingBox .lavagem-card{
-    margin: 0;
 }
 </style>
 
@@ -404,6 +402,10 @@ function atualizarMensal(){
 
     const f = registros.filter(r=>r.mes===mes && r.ano===ano);
 
+    listaMensal.innerHTML = '';
+    rankingMensal.innerHTML = '';
+    semanasContainer.innerHTML = '';
+    
     mesAtual.innerText = mes + '/' + ano;
 
     const total = f.reduce((a,b)=>a+b.valorSujo,0);
@@ -420,8 +422,9 @@ function atualizarMensal(){
         semanas += `
         <div class="semana-box">
             <strong>Semana ${s}</strong><br>
-            💰 $ ${formatar(t)}<br>
-            💸 R$ ${formatar(t*0.1)}
+            💰 Lavado: $ 
+            ${formatar(t)}<br>
+            💸 Lucro: R$ ${formatar(t*0.1)}
         </div>`;
     }
 
@@ -486,7 +489,7 @@ rankingOrdenado.forEach(([faccao, dados], index) => {
 
     rankingMensal.innerHTML += `
         <div class="${classe}">
-            ${medalha} <strong>${index + 1}º</strong> • ${faccao} →
+            ${medalha} <strong>${index + 1}º</strong> — ${faccao} •
             ${dados.quantidade} ${dados.quantidade === 1 ? 'lavagem' : 'lavagens'} →
             💰 $ ${formatar(dados.total)}
         </div>
