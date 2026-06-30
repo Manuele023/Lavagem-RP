@@ -224,7 +224,7 @@ button{
 💰 Valor total lavado mensal: $ <span id="totalMensal"></span><br><br>
 💸 Lucro mensal: R$ <span id="lucroMensal"></span><br><br>
 
-<strong>🏆 Ranking mensal de facções</strong>
+<h2>🏆 Ranking mensal de facções</h2>
 
 <div id="rankingBox">
     <div id="rankingMensal"></div>
@@ -435,25 +435,50 @@ function atualizarMensal(){
     }
 
     // 💰 TOTAIS
-    const total = f.reduce((a,b)=>a + b.valorSujo,0);
-    totalMensal.innerText = formatar(total);
-    lucroMensal.innerText = formatar(total * 0.1);
+const total = f.reduce((a, b) => a + b.valorSujo, 0);
+totalMensal.innerText = formatar(total);
 
-    // 📅 SEMANAS
-    let semanas = '';
+// lucro mensal correto (variável por taxa)
+const lucroMensalTotal = f.reduce((a, r) => {
+    let lucroPercent = 0;
 
-    for(let s = 1; s <= 5; s++){
-        const t = f
-            .filter(r => r.semana === s)
-            .reduce((a,b) => a + b.valorSujo, 0);
+    if (r.taxa == 20) lucroPercent = 10;
+    else if (r.taxa == 25) lucroPercent = 15;
+    else if (r.taxa == 30) lucroPercent = 20;
 
-        semanas += `
-        <div class="semana-box">
-            <strong>Semana ${s}</strong><br>
-            💰 $ ${formatar(t)}<br>
-            💸 R$ ${formatar(t * 0.1)}
-        </div>`;
-    }
+    return a + (r.valorSujo * (lucroPercent / 100));
+}, 0);
+
+lucroMensal.innerText = formatar(lucroMensalTotal);
+
+// 📅 SEMANAS
+let semanas = '';
+
+for (let s = 1; s <= 5; s++) {
+
+    const lucroSemana = f
+        .filter(r => r.semana === s)
+        .reduce((a, r) => {
+            let lucroPercent = 0;
+
+            if (r.taxa == 20) lucroPercent = 10;
+            else if (r.taxa == 25) lucroPercent = 15;
+            else if (r.taxa == 30) lucroPercent = 20;
+
+            return a + (r.valorSujo * (lucroPercent / 100));
+        }, 0);
+
+    const t = f
+        .filter(r => r.semana === s)
+        .reduce((a, b) => a + b.valorSujo, 0);
+
+    semanas += `
+    <div class="semana-box">
+        <strong>Semana ${s}</strong><br>
+        💰 Lavado: $ ${formatar(t)}<br>
+        💸 Lucro: R$ ${formatar(lucroSemana)}
+    </div>`;
+}
 
     semanasContainer.innerHTML = `<div class="semana-grid">${semanas}</div>`;
 
