@@ -540,10 +540,22 @@ for (let s = 1; s <= 5; s++) {
 function atualizarTudo(){
     document.getElementById('totalLavagens').innerText = registros.length;
 
-    const total = registros.reduce((a,b)=>a+b.valorSujo,0);
+    const total = registros.reduce((a,b)=>a + b.valorSujo,0);
 
     document.getElementById('totalDinheiro').innerText = formatar(total);
-    document.getElementById('lucroTotal').innerText = formatar(total*0.1);
+
+    // 💰 lucro total correto (por taxa)
+    const lucroTotalGeral = registros.reduce((a, r) => {
+        let lucroPercent = 0;
+
+        if (r.taxa == 20) lucroPercent = 10;
+        else if (r.taxa == 25) lucroPercent = 15;
+        else if (r.taxa == 30) lucroPercent = 20;
+
+        return a + (r.valorSujo * (lucroPercent / 100));
+    }, 0);
+
+    document.getElementById('lucroTotal').innerText = formatar(lucroTotalGeral);
 
     atualizarLista();
     atualizarMensal();
