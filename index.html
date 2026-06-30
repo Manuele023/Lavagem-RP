@@ -92,11 +92,11 @@ button{
 #listaMensal,
 #rankingBox{
     max-height: 300px;
-    height: 300px; /* 🔥 IMPORTANTE: força altura real */
+    height: 300px;
     overflow-y: auto;
 
     background: rgba(31,31,31,0.50);
-    padding: 10px;
+    padding: 8px;
     border-radius: 12px;
 
     backdrop-filter: blur(10px);
@@ -162,17 +162,14 @@ button{
 
 /* ---------------- RANKING ---------------- */
 #rankingMensal{
-    display:flex;
-    flex-direction:column;
-    gap:8px;
-    width:100%;
+    display: block; /* 🔥 volta comportamento normal */
 }
 
+/* cards */
 #rankingMensal .lavagem-card{
-    margin:0;
-    width:100%;
-    box-sizing:border-box;
-    flex:0 0 auto;
+    margin: 0;
+    width: 100%;
+    box-sizing: border-box;
 }
 </style>
 
