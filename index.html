@@ -468,7 +468,9 @@ function atualizarLista(){
     const lista = document.getElementById('lista');
     lista.innerHTML = '';
 
-    [...registros].reverse().forEach(r=>{
+    [...registros]
+    .sort((a, b) => Number(b.numero) - Number(a.numero))
+    .forEach(r => {
         let lucroPercent = 0;
 
         if(r.taxa==10) lucroPercent=90;
@@ -582,7 +584,9 @@ for (let s = 1; s <= 5; s++) {
     semanasContainer.innerHTML = `<div class="semana-grid">${semanas}</div>`;
 
     // 📜 LISTA MENSAL
-    [...f].reverse().forEach(r => {
+    [...f]
+    .sort((a, b) => Number(a.numero) - Number(b.numero))
+    .forEach(r => {
         let lucroPercent = 0;
 
         if(r.taxa==10) lucroPercent=90;
