@@ -180,6 +180,19 @@ button{
     scrollbar-width: thin;
     scrollbar-color: rgba(255,255,255,0.12) transparent;
 }
+
+/* garante altura consistente dos cards no histórico */
+#lista .lavagem-card,
+#listaMensal .lavagem-card{
+    margin: 0;
+}
+
+/* controla “2 cards visíveis” de forma correta */
+#lista,
+#listaMensal{
+    max-height: 220px; /* ajuste fino real */
+    overflow-y: auto;
+}
 </style>
 
 <div class="hero">
