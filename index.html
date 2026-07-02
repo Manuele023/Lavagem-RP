@@ -293,16 +293,37 @@ button{
 <input id="valor" placeholder="Ex.: 1.000.000">
 
 <label>Modo de lavagem</label>
-<div style="display:flex; gap:10px; margin-top:8px;">
-    <label style="display:flex; align-items:center; gap:6px;">
-        <input type="radio" name="modoLavagem" value="faccao" checked>
-        Facção
-    </label>
 
-    <label style="display:flex; align-items:center; gap:6px;">
-        <input type="radio" name="modoLavagem" value="pista">
+<div style="display:flex; gap:10px; margin-top:8px;">
+
+    <div onclick="selecionarModo('faccao')" id="boxFaccao"
+        style="
+        flex:1;
+        padding:10px;
+        border-radius:8px;
+        background:#2a2a2a;
+        text-align:center;
+        cursor:pointer;
+        border:2px solid #8B1E1E;
+        opacity:1;
+    ">
+        Facção
+    </div>
+
+    <div onclick="selecionarModo('pista')" id="boxPista"
+        style="
+        flex:1;
+        padding:10px;
+        border-radius:8px;
+        background:#2a2a2a;
+        text-align:center;
+        cursor:pointer;
+        border:2px solid transparent;
+        opacity:0.6;
+    ">
         Pista
-    </label>
+    </div>
+
 </div>
 
 <button onclick="calcular()" style="
