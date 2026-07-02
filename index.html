@@ -292,6 +292,19 @@ button{
 <label>Valor sujo</label>
 <input id="valor" placeholder="Ex.: 1.000.000">
 
+<label>Modo de lavagem</label>
+<div style="display:flex; gap:10px; margin-top:8px;">
+    <label style="display:flex; align-items:center; gap:6px;">
+        <input type="radio" name="modoLavagem" value="faccao" checked>
+        Facção
+    </label>
+
+    <label style="display:flex; align-items:center; gap:6px;">
+        <input type="radio" name="modoLavagem" value="pista">
+        Pista
+    </label>
+</div>
+
 <button onclick="calcular()" style="
     font-weight:bold;
     background:#8B1E1E;
@@ -300,6 +313,11 @@ button{
     Registrar Lavagem
 </button>
 
+</div>
+
+<div style="display:flex; gap:10px; margin-bottom:15px;">
+    <button onclick="setFiltro('faccao')" id="btnFaccao">Facção</button>
+    <button onclick="setFiltro('pista')" id="btnPista">Pista</button>
 </div>
     
 <h2>📜 Histórico de Lavagens</h2>
@@ -363,6 +381,8 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 let registros = [];
+
+let filtroModo = "faccao";
 
 /* ---------------- DISCORD ---------------- */
 function enviarDiscord(r){
@@ -473,7 +493,9 @@ async function calcular(){
         semana: Math.ceil(data.getDate()/7)
     };
 
-    await addDoc(collection(db,"lavagens"), r);
+    const colecao = modo === "pista" ? "lavagens_pista" : "lavagens";
+
+    await addDoc(collection(db, colecao), r);
 
     enviarDiscord(r);
     await carregar();
@@ -493,20 +515,36 @@ mostrarToast();
 window.calcular = calcular;
 /* ---------------- CARREGAR ---------------- */
 async function carregar(){
-    const snap = await getDocs(collection(db,"lavagens"));
+    const snap1 = await getDocs(collection(db,"lavagens"));
+    const snap2 = await getDocs(collection(db,"lavagens_pista"));
 
     registros = [];
 
-    snap.forEach(d=>{
-        registros.push({ id:d.id, ...d.data() });
+    snap1.forEach(d => {
+        registros.push({
+            id: d.id,
+            ...d.data(),
+            origem: "faccao"
+        });
+    });
+
+    snap2.forEach(d => {
+        registros.push({
+            id: d.id,
+            ...d.data(),
+            origem: "pista"
+        });
     });
 
     atualizarTudo();
 }
 
 /* ---------------- EXCLUIR ---------------- */
-async function excluir(id){
-    await deleteDoc(doc(db,"lavagens",id));
+async function excluir(id, origem){
+
+    const colecao = origem === "pista" ? "lavagens_pista" : "lavagens";
+
+    await deleteDoc(doc(db, colecao, id));
     await carregar();
 }
 
@@ -518,8 +556,8 @@ function atualizarLista(){
     lista.innerHTML = '';
 
     [...registros]
+    .filter(r => r.origem === filtroModo)
     .sort((a, b) => Number(b.numero) - Number(a.numero))
-    .forEach(r => {
         let lucroPercent = 0;
 
         if(r.taxa==10) lucroPercent=90;
@@ -539,7 +577,7 @@ function atualizarLista(){
             💸 Valor limpo: R$ ${formatar(r.valorLimpo)}<br>
             💰 Lucro: R$ ${formatar(lucro)}<br>
 
-            <button onclick="excluir('${r.id}')"
+            <button onclick="excluir('${r.id}','${r.origem}')"
             style="margin-top:10px;background:#8B1E1E;color:white;border:none;font-weight:bold;">
             Excluir</button>
         </div>`;
@@ -561,7 +599,8 @@ function atualizarMensal(){
     // 🔥 FILTRO DO MÊS
     const f = registros.filter(r =>
     String(r.mes) === String(mes) &&
-    String(r.ano) === String(ano)
+    String(r.ano) === String(ano) &&
+    r.origem === filtroModo
 );
     // 🔥 LIMPA TUDO SEMPRE
     listaMensal.innerHTML = '';
@@ -714,6 +753,7 @@ function atualizarTudo(){
     atualizarLista();
     atualizarMensal();
 }
+    
 function mostrarToast() {
     const toast = document.getElementById("toast");
 
@@ -723,6 +763,19 @@ function mostrarToast() {
         toast.classList.remove("show");
     }, 2500);
 }
+    
+function setFiltro(modo){
+    filtroModo = modo;
+
+    atualizarLista();
+    atualizarMensal();
+
+    document.getElementById("btnFaccao").style.opacity = modo === "faccao" ? "1" : "0.5";
+    document.getElementById("btnPista").style.opacity = modo === "pista" ? "1" : "0.5";
+}
+
+window.setFiltro = setFiltro;
+    
 /* ---------------- INIT ---------------- */
 initFiltros();
 carregar();
